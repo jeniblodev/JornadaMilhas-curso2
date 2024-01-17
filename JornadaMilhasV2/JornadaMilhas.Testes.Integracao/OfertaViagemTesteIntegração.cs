@@ -6,13 +6,11 @@ namespace JornadaMilhas.Testes.Integracao;
 public class OfertaViagemTesteIntegração
 {
     //Setup
-    private readonly JornadaMilhasContext context;
-    private readonly DAL dal;
+     private readonly JornadaMilhasContext context;
      public OfertaViagemTesteIntegração()
-    {     
+    {   
 
         context = new JornadaMilhasContext();
-        dal = new DAL(context);
     }
 
     [Fact]
@@ -23,7 +21,6 @@ public class OfertaViagemTesteIntegração
         var resultado = context.Database.CanConnectAsync();
         //Assert
         Assert.True(resultado.Result);
-
     }
              
 }
