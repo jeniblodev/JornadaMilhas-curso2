@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace JornadaMilhasV0.Dados;
-internal class JornadaMilhasContext: DbContext
+public class JornadaMilhasContext: DbContext
 {
     public DbSet<OfertaViagem> OfertasViagem { get; set; }
     public DbSet<Rota> Rota { get; set; }

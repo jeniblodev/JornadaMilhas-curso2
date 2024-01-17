@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace JornadaMilhasV0.Dados;
-internal class DAL
+public class DAL:IDisposable
 {
     private readonly JornadaMilhasContext _dbContext;
 
@@ -97,5 +97,10 @@ internal class DAL
             _dbContext.OfertasViagem.Remove(ofertaViagem);
             _dbContext.SaveChanges();
         }
+    }
+
+    public void Dispose()
+    {
+        this.Dispose();
     }
 }
