@@ -1,30 +1,29 @@
 using JornadaMilhasV0.Dados;
+using Xunit.Abstractions;
 
 namespace JornadaMilhas.Testes.Integracao;
 
-public class OfertaViagemTesteIntegração:IDisposable
+public class OfertaViagemTesteIntegração
 {
     //Setup
     private readonly JornadaMilhasContext context;
     private readonly DAL dal;
+     public OfertaViagemTesteIntegração()
+    {     
 
-    public OfertaViagemTesteIntegração()
-    {
         context = new JornadaMilhasContext();
         dal = new DAL(context);
     }
 
     [Fact]
-    public void Test1()
+    public void TestaConexaoComBaseDeDados()
     {
+        //Arrange
+        //Act
+        var resultado = context.Database.CanConnectAsync();
+        //Assert
+        Assert.True(resultado.Result);
 
     }
-
-    //Cleanup
-    public void Dispose()
-    {
-        dal.Dispose();
-        context.Dispose();
-    }
-        
+             
 }
