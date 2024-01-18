@@ -44,45 +44,9 @@ public class DAL:IDisposable
         return _dbContext.OfertasViagem.Find(id);
     }
 
-    public void AdicionarOfertaViagem()
+    public void AdicionarOfertaViagem(OfertaViagem oferta)
     {
-        Console.WriteLine("-- Cadastro de ofertas --");
-        Console.WriteLine("Informe a cidade de origem: ");
-        string origem = Console.ReadLine();
-
-        Console.WriteLine("Informe a cidade de destino: ");
-        string destino = Console.ReadLine();
-
-        Console.WriteLine("Informe a data de ida (DD/MM/AAAA): ");
-        DateTime dataIda;
-        if (!DateTime.TryParse(Console.ReadLine(), out dataIda))
-        {
-            Console.WriteLine("Data de ida inválida.");
-            return;
-        }
-
-        Console.WriteLine("Informe a data de volta (DD/MM/AAAA): ");
-        DateTime dataVolta;
-        if (!DateTime.TryParse(Console.ReadLine(), out dataVolta))
-        {
-            Console.WriteLine("Data de volta inválida.");
-            return;
-        }
-
-        Console.WriteLine("Informe o preço: ");
-        double preco;
-        if (!double.TryParse(Console.ReadLine(), out preco))
-        {
-            Console.WriteLine("Formato de preço inválido.");
-            return;
-        }
-
-        OfertaViagem ofertaCadastrada = new OfertaViagem(new Rota(origem, destino), dataIda, dataVolta, preco);
-        
-        Console.WriteLine("\nOferta cadastrada com sucesso.");
-
-
-        _dbContext.OfertasViagem.Add(ofertaCadastrada);
+        _dbContext.OfertasViagem.Add(oferta);
         _dbContext.SaveChanges();
     }
 

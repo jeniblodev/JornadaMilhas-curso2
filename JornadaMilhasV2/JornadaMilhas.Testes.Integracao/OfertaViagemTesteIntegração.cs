@@ -1,4 +1,5 @@
 using JornadaMilhasV0.Dados;
+using JornadaMilhasV0.Modelos;
 
 namespace JornadaMilhas.Testes.Integracao;
 
@@ -50,6 +51,26 @@ public class OfertaViagemTesteIntegração:IDisposable
         //Assert
         Assert.NotNull(oferta);
     }
+
+    [Fact]
+    public void TestaInclusaoDeNovaOferta()
+    {
+        //Arrange
+        var rota = new Rota("TesteRotaOrigem", "TesteRotaDestino");
+        var dataIda = new DateTime(2024, 03, 20);
+        var dataVolta = new DateTime(2024, 03, 25);
+        var preco = 600;
+
+
+        var novaOferta = new OfertaViagem(rota,dataIda ,dataVolta , 600 );
+        //Act
+
+        ofertasDAL.AdicionarOfertaViagem(novaOferta) ;
+        //Assert
+        var ofertas = ofertasDAL.ObterTodasOfertasViagem();
+        Assert.Contains(novaOferta, ofertas);
+    }
+
 
     //Cleanup
     public void Dispose()
