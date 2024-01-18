@@ -1,3 +1,4 @@
+using JornadaMilhas.Testes.Integracao.Dados;
 using JornadaMilhasV0.Dados;
 using JornadaMilhasV0.Modelos;
 
@@ -10,9 +11,9 @@ public class OfertaViagemTesteIntegração:IDisposable
     private readonly DAL ofertasDAL;
     
     public OfertaViagemTesteIntegração()
-    {     
+    {
 
-        context = new JornadaMilhasContext();   
+        context = Carregar.InMemory();  
         ofertasDAL = new DAL(context);
     }
 
@@ -39,7 +40,7 @@ public class OfertaViagemTesteIntegração:IDisposable
         var listaDeOfertas = ofertasDAL.ObterTodasOfertasViagem();
         //Assert
         Assert.NotNull(listaDeOfertas);
-        Assert.Equal(5, listaDeOfertas.Count);
+        Assert.Equal(2, listaDeOfertas.Count);
     }
 
     [Fact]
