@@ -22,11 +22,14 @@ while (true)
     switch (opcao)
     {
         case "1":
-            /*gerenciador.CadastrarOferta();*/
+            
             ofertasDAL.AdicionarOfertaViagem();
             break;
         case "2":
-            ofertasDAL.ObterTodasOfertasViagem();
+            foreach (var oferta in ofertasDAL.ObterTodasOfertasViagem())
+            {
+                Console.WriteLine($"Origem: {oferta.Rota}, Destino: {oferta.Rota}, Data de Ida: {oferta.DataIda.ToShortDateString()}, Data de Volta: {oferta.DataVolta.ToShortDateString()}, Preço: {oferta.Preco:C}");
+            }
             break;
         case "3":
             Console.WriteLine("Obrigada por utilizar o Jornada Milhas. Até mais!");

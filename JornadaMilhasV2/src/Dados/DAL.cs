@@ -33,7 +33,10 @@ public class DAL:IDisposable
 
     public List<OfertaViagem> ObterTodasOfertasViagem()
     {
-        return _dbContext.OfertasViagem.ToList();
+
+        Console.WriteLine("\nTodas as ofertas cadastradas: ");
+
+        return _dbContext.OfertasViagem.ToList(); 
     }
 
     public OfertaViagem ObterOfertaViagemPorId(int id)
