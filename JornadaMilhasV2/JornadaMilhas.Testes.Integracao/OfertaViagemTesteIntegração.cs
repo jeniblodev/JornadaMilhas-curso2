@@ -50,6 +50,7 @@ public class OfertaViagemTesteIntegração:IDisposable
         var oferta = ofertasDAL.ObterOfertaViagemPorId(3);
         //Assert
         Assert.NotNull(oferta);
+        Assert.IsType<OfertaViagem>(oferta);
     }
 
     [Fact]
@@ -62,14 +63,46 @@ public class OfertaViagemTesteIntegração:IDisposable
         var preco = 600;
 
 
-        var novaOferta = new OfertaViagem(rota,dataIda ,dataVolta , 600 );
+        var novaOferta = new OfertaViagem(rota,dataIda ,dataVolta , preco );
         //Act
 
-        ofertasDAL.AdicionarOfertaViagem(novaOferta) ;
-        //Assert
+        ofertasDAL.AdicionarOfertaViagem(novaOferta);
         var ofertas = ofertasDAL.ObterTodasOfertasViagem();
+
+        //Assert
         Assert.Contains(novaOferta, ofertas);
     }
+
+    [Fact]
+    public void TestaAtualizacaoDoPrecoDaOferta()
+    {
+        //Arrange
+        var ofertaAtualizada = ofertasDAL.ObterOfertaViagemPorId(2002);
+        ofertaAtualizada.Preco = 400;
+
+        //Act
+        ofertasDAL.AtualizarOfertaViagem(ofertaAtualizada);
+        var ofertas = ofertasDAL.ObterTodasOfertasViagem();
+
+        //Assert
+        Assert.Contains(ofertaAtualizada, ofertas);
+    }
+
+    [Fact]
+    public void TestaExclusaoDaOferta()
+    {
+        //Arrange
+        var ofertaExcluida = ofertasDAL.ObterOfertaViagemPorId(2002);
+
+        //Act
+        ofertasDAL.RemoverOfertaViagem(ofertaExcluida);
+        var ofertas = ofertasDAL.ObterTodasOfertasViagem();
+
+        //Assert
+        Assert.DoesNotContain(ofertaExcluida, ofertas);
+    }
+
+
 
 
     //Cleanup

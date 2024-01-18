@@ -52,13 +52,18 @@ public class DAL:IDisposable
 
     public void AtualizarOfertaViagem(OfertaViagem ofertaViagem)
     {
-        _dbContext.OfertasViagem.Update(ofertaViagem);
-        _dbContext.SaveChanges();
+        var ofertaViagemAtualizado = _dbContext.OfertasViagem.Find(ofertaViagem.Id);
+
+        if (ofertaViagemAtualizado != null)
+        {
+            _dbContext.OfertasViagem.Update(ofertaViagemAtualizado);
+            _dbContext.SaveChanges();
+        }
     }
 
-    public void RemoverOfertaViagem(int id)
+    public void RemoverOfertaViagem(OfertaViagem oferta)
     {
-        var ofertaViagem = _dbContext.OfertasViagem.Find(id);
+        var ofertaViagem = _dbContext.OfertasViagem.Find(oferta.Id);
         if (ofertaViagem != null)
         {
             _dbContext.OfertasViagem.Remove(ofertaViagem);
