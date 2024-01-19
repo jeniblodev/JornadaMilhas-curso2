@@ -2,7 +2,6 @@
 using JornadaMilhasV0.Gerenciador;
 using JornadaMilhasV0.Modelos;
 
-
 List<OfertaViagem> listaOfertasViagem = new List<OfertaViagem>();
 var gerenciador = new GerenciadorDeOfertas(listaOfertasViagem);
 var context = new JornadaMilhasContext();
@@ -24,10 +23,10 @@ while (true)
         case "1":
             Console.WriteLine("-- Cadastro de ofertas --");
             Console.WriteLine("Informe a cidade de origem: ");
-            string origem = Console.ReadLine();
+            string origem = Console.ReadLine()!;
 
             Console.WriteLine("Informe a cidade de destino: ");
-            string destino = Console.ReadLine();
+            string destino = Console.ReadLine()!;
 
             Console.WriteLine("Informe a data de ida (DD/MM/AAAA): ");
             DateTime dataIda;
