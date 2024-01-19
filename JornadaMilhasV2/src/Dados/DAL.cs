@@ -1,12 +1,7 @@
 ﻿using JornadaMilhasV0.Modelos;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace JornadaMilhasV0.Dados;
-public class DAL:IDisposable
+public class DAL:IDisposable, IDAL
 {
     private readonly JornadaMilhasContext _dbContext;
 
@@ -29,7 +24,6 @@ public class DAL:IDisposable
             _dbContext.SaveChanges();
         }
     }
-
 
     public List<OfertaViagem> ObterTodasOfertasViagem()
     {
