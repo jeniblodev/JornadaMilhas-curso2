@@ -2,6 +2,7 @@ using JornadaMilhas.Testes.Integracao.Dados;
 using JornadaMilhas.Testes.Integracao.UtilExtension;
 using JornadaMilhasV0.Dados;
 using JornadaMilhasV0.Modelos;
+using Moq;
 
 namespace JornadaMilhas.Testes.Integracao;
 
@@ -117,7 +118,26 @@ public class OfertaViagemTesteIntegração:IDisposable
         }).ExceptionMessage($"Oferta para exclusão com o ID= {novaOferta.Id} não encontrada.");
     }
 
+    //Mock
+    [Fact]
+    public void TestaObterOfertasPorIdMock()
+    {
+        //Arrange                
+        var mockDAL = new Mock<IDAL>();    //definindo o objeto que será mockado   
 
+         mockDAL //configurando o objeto para execução do método que consulta por Id
+            .Setup(_ => _.ObterOfertaViagemPorId(It.IsAny<int>()))
+            .Returns(() => new OfertaViagem(new Rota("TesteRotaOrigem", "TesteRotaDestino"), new DateTime(2024, 03, 20), new DateTime(2024, 03, 25), 2000) { Id = 800 });
+
+        //Act
+        var retorno = mockDAL.Object.ObterOfertaViagemPorId(800);//Executa o co mportamento
+        
+        //Assert
+        Assert.NotNull(retorno );
+        Assert.Equal(800, retorno.Id );
+        Assert.Equal("TesteRotaOrigem", retorno.Rota.Origem);
+    
+    }
 
 
     //Cleanup
