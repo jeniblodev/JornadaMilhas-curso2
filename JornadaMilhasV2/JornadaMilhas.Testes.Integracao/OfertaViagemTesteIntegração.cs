@@ -1,4 +1,5 @@
 using JornadaMilhas.Testes.Integracao.Dados;
+using JornadaMilhas.Testes.Integracao.UtilExtension;
 using JornadaMilhasV0.Dados;
 using JornadaMilhasV0.Modelos;
 
@@ -101,6 +102,19 @@ public class OfertaViagemTesteIntegração:IDisposable
 
         //Assert
         Assert.DoesNotContain(ofertaExcluida, ofertas);
+    }
+
+    [Fact]
+    public void TestaExclusaoDeOfertaInexistenteDeveGerarExcecao()
+    {
+        //Arrange
+        var novaOferta = new OfertaViagem(new Rota("TesteRotaOrigem", "TesteRotaDestino"), new DateTime(2024, 03, 20), new DateTime(2024, 03, 25), 2000) { Id=999};
+
+        //Act+Assert
+        Assert.Throws<InvalidOperationException>(() =>
+        {
+           ofertasDAL.RemoverOfertaViagem(novaOferta);
+        }).ExceptionMessage($"Oferta para exclusão com o ID= {novaOferta.Id} não encontrada.");
     }
 
 

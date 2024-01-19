@@ -69,6 +69,7 @@ public class DAL:IDisposable
             _dbContext.OfertasViagem.Remove(ofertaViagem);
             _dbContext.SaveChanges();
         }
+        throw new InvalidOperationException($"Oferta para exclusão com o ID= {oferta.Id} não encontrada.");
     }
 
     public void Dispose()
