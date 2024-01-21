@@ -1,3 +1,4 @@
+using Bogus;
 using JornadaMilhas.Testes.Integracao.Dados;
 using JornadaMilhas.Testes.Integracao.UtilExtension;
 using JornadaMilhasV0.Dados;
@@ -137,6 +138,34 @@ public class OfertaViagemTesteIntegração:IDisposable
         Assert.Equal(800, retorno.Id );
         Assert.Equal("TesteRotaOrigem", retorno.Rota.Origem);
     
+    }
+
+    [Fact]
+    public void TestaObterTodasOfertasViagemBogus()
+    {
+        //Arrange
+        var faker = new Faker<OfertaViagem>()
+            .RuleFor(o => o.Id, f => f.UniqueIndex + 1)
+            .RuleFor(o => o.Rota, f => new Rota(f.Address.City(), f.Address.City()))
+            .RuleFor(o => o.DataIda, f => f.Date.Future())
+            .RuleFor(o => o.DataVolta, (f, o) => o.DataIda.AddDays(f.Random.Int(1, 7)))
+            .RuleFor(o => o.Preco, f => f.Random.Double(1000, 5000));
+
+        var mockDAL = new Mock<IDAL>();
+
+        mockDAL.Setup(_ => _.ObterTodasOfertasViagem())
+            .Returns(() => faker.Generate(2));
+            
+
+        //Act
+        var retorno = mockDAL.Object.ObterTodasOfertasViagem();
+
+        //Assert
+        Assert.NotNull(retorno );
+        Assert.Equal(2, retorno.Count );
+        Assert.NotNull(retorno[0].Rota.Origem);
+        Assert.NotNull(retorno[1].Rota.Destino);
+
     }
 
 
