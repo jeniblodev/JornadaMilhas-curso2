@@ -44,7 +44,7 @@ public class DAL:IDisposable, IDAL
         _dbContext.SaveChanges();
     }
 
-    public void AtualizarOfertaViagem(OfertaViagem ofertaViagem)
+    public void AtualizarOfertaViagem(OfertaViagem oferta)
     {
         var ofertaViagemAtualizado = _dbContext.OfertasViagem.Find(ofertaViagem.Id);
 
@@ -69,9 +69,14 @@ public class DAL:IDisposable, IDAL
         }
         
     }
+    public async Task<bool> PodeConectarComBaseDeDadosAsync()
+    {
+        return await _dbContext.Database.CanConnectAsync();
+    }
 
     public void Dispose()
     {
         this.Dispose();
     }
+
 }

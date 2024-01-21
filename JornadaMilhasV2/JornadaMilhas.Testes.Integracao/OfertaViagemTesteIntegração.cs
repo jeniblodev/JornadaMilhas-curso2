@@ -11,27 +11,24 @@ public class OfertaViagemTesteIntegração:IDisposable
 {
     //Setup
     private readonly JornadaMilhasContext context;
-    private readonly DAL ofertasDAL;
+    private readonly IDAL ofertasDAL;
     
-    public OfertaViagemTesteIntegração()
+    public OfertaViagemTesteIntegração(IDAL dal)
     {
 
-        context = Carregar.InMemory();  
-        ofertasDAL = new DAL(context);
+        context = Carregar.InMemory();
+        ofertasDAL = dal;
     }
 
     [Fact]
-    public void TestaConexaoComBaseDeDados()
+    public async void TestaConexaoComBaseDeDados()
     {
-
-      
         //Arrange
-
         //Act
-        var resultado = context.Database.CanConnectAsync();
+        var resultado = await ofertasDAL.PodeConectarComBaseDeDadosAsync();
 
         //Assert
-        Assert.True(resultado.Result) ;
+        Assert.True(resultado);
 
     }
 
@@ -43,15 +40,15 @@ public class OfertaViagemTesteIntegração:IDisposable
         var listaDeOfertas = ofertasDAL.ObterTodasOfertasViagem();
         //Assert
         Assert.NotNull(listaDeOfertas);
-        //Assert.Equal(2, listaDeOfertas.Count);
     }
 
     [Fact]
     public void TestaObterOfertasPorId()
     {
         //Arrange
+        int idOferta = 3;
         //Act
-        var oferta = ofertasDAL.ObterOfertaViagemPorId(3);
+        var oferta = ofertasDAL.ObterOfertaViagemPorId(idOferta);
         //Assert
         Assert.NotNull(oferta);
         Assert.IsType<OfertaViagem>(oferta);
@@ -81,7 +78,8 @@ public class OfertaViagemTesteIntegração:IDisposable
     public void TestaAtualizacaoDoPrecoDaOferta()
     {
         //Arrange
-        var ofertaAtualizada = ofertasDAL.ObterOfertaViagemPorId(3);
+        int idOferta = 3;
+        var ofertaAtualizada = ofertasDAL.ObterOfertaViagemPorId(idOferta);
         ofertaAtualizada.Preco = 400;
 
         //Act
@@ -96,7 +94,8 @@ public class OfertaViagemTesteIntegração:IDisposable
     public void TestaExclusaoDaOferta()
     {
         //Arrange
-        var ofertaExcluida = ofertasDAL.ObterOfertaViagemPorId(3);
+        int idOferta = 3;
+        var ofertaExcluida = ofertasDAL.ObterOfertaViagemPorId(idOferta);
 
         //Act
         ofertasDAL.RemoverOfertaViagem(ofertaExcluida);
@@ -113,10 +112,12 @@ public class OfertaViagemTesteIntegração:IDisposable
         var novaOferta = new OfertaViagem(new Rota("TesteRotaOrigem", "TesteRotaDestino"), new DateTime(2024, 03, 20), new DateTime(2024, 03, 25), 2000) { Id=999};
 
         //Act+Assert
-        Assert.Throws<InvalidOperationException>(() =>
+        var exception = Assert.Throws<InvalidOperationException>(() =>
         {
-           ofertasDAL.RemoverOfertaViagem(novaOferta);
-        }).ExceptionMessage($"Oferta para exclusão com o ID= {novaOferta.Id} não encontrada.");
+            ofertasDAL.RemoverOfertaViagem(novaOferta);
+        });
+
+        Assert.Equal($"Oferta para exclusão com o ID= {novaOferta.Id} não encontrada.", exception.Message);
     }
 
     //Mock
@@ -124,14 +125,14 @@ public class OfertaViagemTesteIntegração:IDisposable
     public void TestaObterOfertasPorIdMock()
     {
         //Arrange                
-        var mockDAL = new Mock<IDAL>();    //definindo o objeto que será mockado   
+        var mockDAL = new Mock<IDAL>();    
 
-         mockDAL //configurando o objeto para execução do método que consulta por Id
+         mockDAL 
             .Setup(_ => _.ObterOfertaViagemPorId(It.IsAny<int>()))
             .Returns(() => new OfertaViagem(new Rota("TesteRotaOrigem", "TesteRotaDestino"), new DateTime(2024, 03, 20), new DateTime(2024, 03, 25), 2000) { Id = 800 });
 
         //Act
-        var retorno = mockDAL.Object.ObterOfertaViagemPorId(800);//Executa o co mportamento
+        var retorno = mockDAL.Object.ObterOfertaViagemPorId(800);
         
         //Assert
         Assert.NotNull(retorno );
